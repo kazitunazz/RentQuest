@@ -1,0 +1,600 @@
+﻿@using RentQuest.Models;
+@model X.PagedList.IPagedList<Circulations>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Listing";
+}
+
+@using  RentQuest.Utility
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    int count = 0;
+    List<Circulations> cb = HttpContextAccessor.HttpContext.Session.Get<List<Circulations>>("circulations");
+    if (cb == null)
+    {
+        cb = new List<Circulations>();
+    }
+    count = cb.Count();
+}
+
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Rent<span>Quest</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="oi oi-menu"></span> Menu
+            </button>
+
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" asp-area="Tenant" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Tenant" asp-controller="Home" asp-action="Listing">Property</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Tenant" asp-controller="Home" asp-action="WLSecond"><i class="fas fa-heart"></i>Your Wishlist</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Tenant" asp-controller="Home" asp-action="SentReq">Sent Requests</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Tenant" asp-controller="Home" asp-action="WL">
+                            Request Queue
+                            (@count)
+                        </a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" asp-area="Tenant" asp-controller="Home" asp-action="Index">@ViewBag.sessionv</a></li>
+                    <li class="nav-item cta"><a asp-area="Unregistered" asp-controller="Unreg" asp-action="Index" class="nav-link ml-lg-2"><span class="icon-user"></span> Sign-out</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<div class="hero-wrap" style="background-image: url('/Content/images/bg_1.jpg');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                @*<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Property</span></p>*@
+                <h1 class="mb-3 bread">Property</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<section class="ftco-search">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12 search-wrap">
+                <h2 class="heading h5 d-flex align-items-center pr-4"><span class="ion-ios-search mr-3"></span> Search Property</h2>
+                <form method="post" class="search-property">
+                    <div class="row">
+                        <div class="col-md align-items-end">
+                            <div class="form-group">
+                                <label for="#">Property Name</label>
+                                <div class="form-field">
+                                    <div class="icon"><span class="icon-my_location"></span></div>
+                                    <input type="text" class="form-control" name="PropName" placeholder="Name" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md align-items-end">
+                            <div class="form-group">
+                                <label for="#">Location</label>
+                                <div class="form-field">
+                                    <div class="icon"><span class="icon-my_location"></span></div>
+                                    <input type="text" class="form-control" name="Loc" placeholder="Location" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md align-items-end">
+                            <div class="form-group">
+                                <label for="#">Property Type</label>
+                                <div class="form-field">
+                                    <div class="select-wrap">
+                                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                        @*<input type="text" class="form-control" name="PropType" placeholder="Property Type" />*@
+                                    <select type="text" name="PropType" class="form-control">
+                                        <option value="">Types</option>
+                                        @foreach (var c3 in Model)
+                                        {
+                                    <option value="@c3.CircTypes.CircType">@c3.CircTypes.CircType</option>
+                                        }
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-md align-items-end">
+                                <div class="form-group">
+                                    <label for="#">Property Status</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="" id="" class="form-control">
+                                                <option value="">Type</option>
+                                                <option value="">Rent</option>
+                                                <option value="">Sale</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                        @*<div class="col-md align-items-end">
+                                <div class="form-group">
+                                    <label for="#">Agents</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="" id="" class="form-control">
+                                                <option value="">Any</option>
+                                                <option value="">Jonh Doe</option>
+                                                <option value="">Doe Mags</option>
+                                                <option value="">Kenny Scott</option>
+                                                <option value="">Emily Storm</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md align-items-end">
+                            <div class="form-group">
+                                <label for="#">Min Beds</label>
+                                <div class="form-field">
+                                    <div class="select-wrap">
+                                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                        <input type="number" class="form-control" name="lowbed" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md align-items-end">
+                            <div class="form-group">
+                                <label for="#">Min Bathroom</label>
+                                <div class="form-field">
+                                    <div class="select-wrap">
+                                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                        <input type="number" class="form-control" name="lowbath" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md align-items-end">
+                            <div class="form-group">
+                                <label for="#">Min Rent</label>
+                                <div class="form-field">
+                                    <div class="select-wrap">
+                                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                        <input type="number" class="form-control" name="lowamount" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md align-items-end">
+                            <div class="form-group">
+                                <label for="#">Max Rent</label>
+                                <div class="form-field">
+                                    <div class="select-wrap">
+                                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                        <input type="number" class="form-control" name="highamount" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md align-items-end">
+                            <div class="form-group">
+                                <label for="#">Min Area <span>(sq ft)</span></label>
+                                <div class="form-field">
+                                    <div class="icon"><span class="icon-my_location"></span></div>
+                                    <input type="number" class="form-control" name="sizemin" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md align-items-end">
+                            <div class="form-group">
+                                <label for="#">Max Area <span>(sq ft)</span></label>
+                                <div class="form-field">
+                                    <div class="icon"><span class="icon-my_location"></span></div>
+                                    <input type="number" class="form-control" name="sizemax" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md align-self-end">
+                            <div class="form-group">
+                                <div class="form-field">
+                                    <input type="submit" value="Search" class="form-control btn btn-primary">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*<form method="post">
+        <div class="row">
+            <div class="col-3">
+                <input type="checkbox" class="form-control" name="PropType" />
+            </div>
+            <div class="col-3">
+                <input type="text" class="form-control" name="PropName" />
+            </div>
+            <div class="col-3">
+                <input type="submit" class="form-control" value="Search" class="btn btn-success" />
+            </div>
+            <div class="col-3">
+
+            </div>
+        </div>
+    </form>*@
+
+@*<section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a href="property-single.html" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/Content/images/properties-1.jpg);">
+                            <div class="icon d-flex justify-content-center align-items-center">
+                                <span class="icon-search2"></span>
+                            </div>
+                        </a>
+                        <div class="text p-3">
+                            <span class="status sale">Sale</span>
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a href="property-single.html">North Parchmore Street</a></h3>
+                                    <p>Apartment</p>
+                                </div>
+                                <div class="two">
+                                    <span class="price">$20,000</span>
+                                </div>
+                            </div>
+                            <p>Far far away, behind the word mountains, far from the countries</p>
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> 250sqft</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> 3</span>
+                                <span><i class="flaticon-bed"></i> 4</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a href="property-single.html" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/Content/images/properties-2.jpg);">
+                            <div class="icon d-flex justify-content-center align-items-center">
+                                <span class="icon-search2"></span>
+                            </div>
+                        </a>
+                        <div class="text p-3">
+                            <span class="status sale">Sale</span>
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a href="property-single.html">North Parchmore Street</a></h3>
+                                    <p>Apartment</p>
+                                </div>
+                                <div class="two">
+                                    <span class="price">$20,000</span>
+                                </div>
+                            </div>
+                            <p>Far far away, behind the word mountains, far from the countries</p>
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> 250sqft</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> 3</span>
+                                <span><i class="flaticon-bed"></i> 4</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a href="property-single.html" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/Content/images/properties-3.jpg);">
+                            <div class="icon d-flex justify-content-center align-items-center">
+                                <span class="icon-search2"></span>
+                            </div>
+                        </a>
+                        <div class="text p-3">
+                            <span class="status rent">Rent</span>
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a href="property-single.html">North Parchmore Street</a></h3>
+                                    <p>Apartment</p>
+                                </div>
+                                <div class="two">
+                                    <span class="price">$800 <small>/ month</small></span>
+                                </div>
+                            </div>
+                            <p>Far far away, behind the word mountains, far from the countries</p>
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> 250sqft</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> 3</span>
+                                <span><i class="flaticon-bed"></i> 4</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a href="property-single.html" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/Content/images/properties-4.jpg);">
+                            <div class="icon d-flex justify-content-center align-items-center">
+                                <span class="icon-search2"></span>
+                            </div>
+                        </a>
+                        <div class="text p-3">
+                            <span class="status sale">Sale</span>
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a href="property-single.html">North Parchmore Street</a></h3>
+                                    <p>Apartment</p>
+                                </div>
+                                <div class="two">
+                                    <span class="price">$20,000</span>
+                                </div>
+                            </div>
+                            <p>Far far away, behind the word mountains, far from the countries</p>
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> 250sqft</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> 3</span>
+                                <span><i class="flaticon-bed"></i> 4</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a href="property-single.html" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/Content/images/properties-5.jpg);">
+                            <div class="icon d-flex justify-content-center align-items-center">
+                                <span class="icon-search2"></span>
+                            </div>
+                        </a>
+                        <div class="text p-3">
+                            <span class="status sale">Sale</span>
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a href="property-single.html">North Parchmore Street</a></h3>
+                                    <p>Apartment</p>
+                                </div>
+                                <div class="two">
+                                    <span class="price">$20,000</span>
+                                </div>
+                            </div>
+                            <p>Far far away, behind the word mountains, far from the countries</p>
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> 250sqft</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> 3</span>
+                                <span><i class="flaticon-bed"></i> 4</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a href="property-single.html" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/Content/images/properties-6.jpg);">
+                            <div class="icon d-flex justify-content-center align-items-center">
+                                <span class="icon-search2"></span>
+                            </div>
+                        </a>
+                        <div class="text p-3">
+                            <span class="status sale">Sale</span>
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a href="property-single.html">North Parchmore Street</a></h3>
+                                    <p>Apartment</p>
+                                </div>
+                                <div class="two">
+                                    <span class="price">$20,000</span>
+                                </div>
+                            </div>
+                            <p>Far far away, behind the word mountains, far from the countries</p>
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> 250sqft</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> 3</span>
+                                <span><i class="flaticon-bed"></i> 4</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a href="property-single.html" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/Content/images/properties-7.jpg);">
+                            <div class="icon d-flex justify-content-center align-items-center">
+                                <span class="icon-search2"></span>
+                            </div>
+                        </a>
+                        <div class="text p-3">
+                            <span class="status rent">Rent</span>
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a href="property-single.html">North Parchmore Street</a></h3>
+                                    <p>Apartment</p>
+                                </div>
+                                <div class="two">
+                                    <span class="price">$899 <small>/ month</small></span>
+                                </div>
+                            </div>
+                            <p>Far far away, behind the word mountains, far from the countries</p>
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> 250sqft</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> 3</span>
+                                <span><i class="flaticon-bed"></i> 4</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a href="property-single.html" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/Content/images/properties-8.jpg);">
+                            <div class="icon d-flex justify-content-center align-items-center">
+                                <span class="icon-search2"></span>
+                            </div>
+                        </a>
+                        <div class="text p-3">
+                            <span class="status sale">Sale</span>
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a href="property-single.html">North Parchmore Street</a></h3>
+                                    <p>Apartment</p>
+                                </div>
+                                <div class="two">
+                                    <span class="price">$20,000</span>
+                                </div>
+                            </div>
+                            <p>Far far away, behind the word mountains, far from the countries</p>
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> 250sqft</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> 3</span>
+                                <span><i class="flaticon-bed"></i> 4</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a href="property-single.html" class="img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/Content/images/properties-9.jpg);">
+                            <div class="icon d-flex justify-content-center align-items-center">
+                                <span class="icon-search2"></span>
+                            </div>
+                        </a>
+                        <div class="text p-3">
+                            <span class="status sale">Sale</span>
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a href="property-single.html">North Parchmore Street</a></h3>
+                                    <p>Apartment</p>
+                                </div>
+                                <div class="two">
+                                    <span class="price">$20,000</span>
+                                </div>
+                            </div>
+                            <p>Far far away, behind the word mountains, far from the countries</p>
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> 250sqft</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> 3</span>
+                                <span><i class="flaticon-bed"></i> 4</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col text-center">
+                    <div class="block-27">
+                        <ul>
+                            <li><a href="#">&lt;</a></li>
+                            <li class="active"><span>1</span></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li><a href="#">&gt;</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>*@
+
+@*<br /><br/>
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row">
+                @foreach (var circulations in Model)
+                {
+                    <div class="col-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">
+                                    <label style="font-size: 23px; color:steelblue;">@circulations.Name</label>
+                                </h4>
+                            </div>
+                            <img src="~/@circulations.Image" alt="Card Image" class="card-img-top" style="height:300px" />
+                            <div class="card-header">
+                                <div class="justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <label style="font-size: 20px;color:#a51313"><b>Monthly Rent : @circulations.Monthly_Rent</b></label>
+                                    </div>
+                                    <a asp-action="Dettails" asp-controller="Home" asp-route-id="@circulations.Id" class="btn btn-success pull-right btn-outline-info">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        </section>*@
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row">
+
+            @foreach (var circulations in Model)
+            {
+                <div class="col-md-4 ftco-animate">
+                    <div class="properties">
+                        <a class="img img-2 d-flex ">
+                            <img src="~/@circulations.Image" alt="Card Image" class="card-img-top" style="height:300px" />
+                        </a>
+                        <div class="text p-3">
+                            @*<span class="status sale">Available</span>*@
+                            <div class="d-flex">
+                                <div class="one">
+                                    <h3><a>@circulations.Name</a></h3>
+                                    <div>
+                                        Location: @circulations.Location
+                                        <br />
+                                        Type: @circulations.CircTypes.CircType
+                                    </div>
+                                </div>
+                                <div class="two">
+                                    <span class="price">@circulations.Monthly_Rent</span>
+                                </div>
+
+                            </div>
+
+                            <div>
+                                <p>Owner Email: @circulations.HEmail</p>
+
+                            </div>
+
+
+                            <hr>
+                            <p class="bottom-area d-flex">
+                                <span><i class="flaticon-selection"></i> @circulations.SizeSQFT SQFT</span>
+                                <span class="ml-auto"><i class="flaticon-bathtub"></i> @circulations.num_bath</span>
+                                <span><i class="flaticon-bed"></i> @circulations.num_bed</span>
+                                <div><a asp-action="Detail" asp-controller="Home" asp-route-id="@circulations.Id" class="btn btn-success pull-right btn-outline-info">Details</a></div>
+                            </p>
+                            <br />
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row mt-5">
+            <div class="col text-center">
+                <div class="block-27">
+                    <ul>
+                        <li class="active"><span> @Html.PagedListPager(Model, c => Href("~/Tenant/Home/Listing?page=" + c))</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
